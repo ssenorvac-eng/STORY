@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>OUR STORY</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/blasten/turn.js/turn.min.js"></script>
+
+<style>
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ================= INTRO CINEMATIC ================= */
+#intro {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 9999;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 70%, #000000 100%);
+}
+
+#intro::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255,220,180,0.08), rgba(0,0,0,0.7), black);
+    animation: memoryPulse 6s ease-in-out infinite;
+}
+
+@keyframes memoryPulse {
+    0%,100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 1; }
+}
+
+.introText {
+    position: absolute;
+    color: #f5e6c8;
+    font-family: 'Caveat', cursive;
+    font-size: 80px;
+    letter-spacing: 6px;
+    text-shadow: 0 0 40px rgba(255,220,180,0.3);
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards;
+}
+
+.introSub {
+    position: absolute;
+    margin-top: 110px;
+    color: rgba(245,230,200,0.85);
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards;
+    animation-delay: 1.8s;
+}
+
+.introTimer {
+    position: absolute;
+    margin-top: 180px;
+    color: rgba(255,255,255,0.85);
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    text-align: center;
+    opacity: 0;
+    animation: heartbeat 1.5s infinite ease-in-out, fadeIn 1.5s ease forwards;
+    animation-delay: 0s, 3.2s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.07); }
+    100% { transform: scale(1); }
+}
+
+#stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* ================= FUNDAL ================= */
+.bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url("fundal.jpg") center/cover no-repeat;
+    z-index: -2;
+    display: none;
+}
+
+.blur {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background: rgba(0,0,0,0.35);
+    z-index: -1;
+    display: none;
+}
+
+/* ================= CARTE ================= */
+.container {
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    perspective: 2500px;
+}
+
+#flipbook {
+    width: 900px;
+    height: 550px;
+}
+
+.page {
+    width: 450px;
+    height: 550px;
+    background: url("paper.png") center/cover no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Stil pentru numarul paginii */
+.page-footer {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: rgba(74, 51, 37, 0.6);
+}
+
+h1, h2, p {
+    font-family: 'Caveat', cursive;
+    color: #2b1a12;
+    text-align: center;
+}
+
+.photo-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.photo-item img {
+    width: 180px;
+    height: 140px;
+    object-fit: cover;
+    border: 6px solid #c8a97e;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+.photo-desc {
+    font-family: 'Caveat', cursive;
+    font-size: 19px;
+    color: #4a3325;
+    max-width: 130px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.posTopRight { top: 60px; right: 30px; flex-direction: row; }
+.posBottomLeft { bottom: 80px; left: 30px; flex-direction: row; }
+
+.storyText {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.6;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 150px;
+}
+
+.firstPageImg {
+    display: block;
+    margin: 20px auto 0;
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 5px solid #c8a97e;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    cursor: pointer;
+    animation: heartPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); box-shadow: 0 10px 25px rgba(200,50,50,0.3); }
+    100% { transform: scale(1); }
+}
+
+#zoomOverlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+#zoomOverlay img {
+    max-width: 90%;
+    max-height: 90%;
+    border: 8px solid white;
+}
+
+.lastPageContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.lastPageContent h2 {
+    font-size: 50px;
+    letter-spacing: 4px;
+    color: #2b1a12;
+    text-transform: uppercase;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+    <source src="muzica.mp3" type="audio/mpeg">
+</audio>
+
+<div id="intro" onclick="startBook()">
+    <canvas id="stars"></canvas>
+    <div class="introText">OUR STORY</div>
+    <div class="introSub">began 22.04.2023</div>
+    <div class="introTimer" id="introTimer"></div>
+</div>
+
+<div class="bg"></div>
+<div class="blur"></div>
+
+<div class="container" id="container">
+    <div id="flipbook"></div>
+</div>
+
+<div id="zoomOverlay" onclick="closeZoom()">
+    <img id="zoomImg">
+</div>
+
+<script>
+/* TIMER */
+const startDate = new Date("2023-04-22T00:00:00");
+
+function updateTimer(){
+    const now = new Date();
+    let diff = now - startDate;
+    let sec = Math.floor(diff / 1000);
+    let min = Math.floor(sec / 60);
+    let hrs = Math.floor(min / 60);
+    let days = Math.floor(hrs / 24);
+    hrs %= 24; min %= 60; sec %= 60;
+    document.getElementById("introTimer").innerHTML = `${days} zile · ${hrs} ore · ${min} minute · ${sec} secunde`;
+}
+setInterval(updateTimer, 1000);
+updateTimer();
+
+/* SCRIS LIVE FUNCTION */
+const storyContent = "Nu este o poveste perfectă. Au existat tăceri grele, orgolii și momente în care fiecare s-a simțit singur chiar lângă celălalt. Dar, printre toate astea, am crescut. Și poate că cel mai frumos lucru nu a fost faptul că am stat trei ani împreună, ci că, în tot acest timp, am învățat ce înseamnă să iubești un om real, cu defecte, cu frici și cu speranțe.";
+
+function typeEffect() {
+    let i = 0;
+    const el = document.getElementById("liveText");
+    if(!el) return;
+    el.innerHTML = "";
+    function type() {
+        if (i < storyContent.length) {
+            el.innerHTML += storyContent.charAt(i);
+            i++;
+            setTimeout(type, 45);
+        }
+    }
+    type();
+}
+
+/* DATE POZE SI TEXTE */
+const photoData = [
+    { src: "1.jpg", desc: "Prima oara sex in masina, asta de sigur v-a intra in albumul nostru de amintiri!!! <3" },
+    { src: "2.jpg", desc: "Celebra prima poză a noastră, care cred că o să apară și pe albumul nunții. :D <3" },
+    { src: "3.jpg", desc: "O poză foarte reușită în care suntem un cuplu foarte frumos de Ajunul Crăciunului. HO!HO!HO! :P" },
+    { src: "4.jpg", desc: "Aici putem vedea amândoi că ți-ar sta foarte bine cu niște buze foarte sexy! SsssEXY! <3" },
+    { src: "5.jpg", desc: "Este o poză făcută la o viteză destul de mare, dar știm amândoi că ne place în BOB. :D" },
+    { src: "6.jpg", desc: "Mai știi că după ce ne-am plimbat prin H&M, ai văzut pescarul ăla și voiai să-l salvăm? :D <3" },
+    { src: "7.jpg", desc: "Cateodata, suntem atât de haiosi atunci când ne facem poze încât râdem ca niște nebuni!!! :D :P" },
+    { src: "8.jpg", desc: "Este Revelionul în care o să țin minte că mi-ai fost alături de mine și apreciez enorm că m-ai ales pe mine. Asta e în suflețelul meu!! <3" },
+    { src: "9.jpg", desc: "O groazieră foarte, dar foarte frumoasă și plină de răsete și aventuri frumoase, ești prea frumoasă!!!! <3" },
+    { src: "10.jpg", desc: "Aproape că ne-am pupat, aici erai GRUMPY, dar mă bucur că ne-a ajutat plimbărica, era al doilea pescarus pe care voiai să-l salvăm. :D <3" },
+    { src: "11.jpg", desc: "O plimbare la înălțime, în care am văzut orașul seara, când era chiar foarte frumos, mă bucur că am fost cu tine!!!<3333" },
+    { src: "12.jpg", desc: "Este prea remarcabil acest moment în care a fost o noapte foarte importantă pentru tine!! 18 YRS GIRLLL!!!<3333" },
+    { src: "13.jpg", desc: "2 BITCHES on the Jetskiiiii, trebuia să ne-o tragem, chiar era ceva memorabil!! :O :D <333333" },
+    { src: "14.jpg", desc: "Deci nu vreau să mint, dar efectiv toată lumea întorcea capul după noi, când ieșeam în oraș așa SPICY și SEXyyyyy!!<333" },
+    { src: "15.jpg", desc: "Și un pupic pentru un final frumos pentru o cărticică, greu famată în acest cod line. :3 <333" }
+];
+
+const book = $("#flipbook");
+let pages = [];
+
+// Prima pagina (Fara numar)
+pages.push(`
+<div class="page">
+<div class="content">
+<h1>Rares si Eliza</h1>
+<p class="storyText" id="liveText"></p>
+<img src="inima.jpg" class="firstPageImg" onclick="zoom(this)">
+</div>
+</div>
+`);
+
+// Calcul total pagini de continut
+const totalContentPages = Math.ceil(photoData.length / 2);
+
+// Generare pagini foto
+for(let i=0; i < photoData.length; i+=2){
+    let item1 = photoData[i];
+    let item2 = photoData[i+1];
+    let currentPageNum = (i / 2) + 1;
+
+    pages.push(`
+    <div class="page">
+    <div class="content">
+        <div class="photo-item posTopRight">
+            <p class="photo-desc">${item1.desc}</p>
+            <img src="${item1.src}" onclick="zoom(this)">
+        </div>
+        ${item2 ? `
+        <div class="photo-item posBottomLeft">
+            <img src="${item2.src}" onclick="zoom(this)">
+            <p class="photo-desc">${item2.desc}</p>
+        </div>
+        ` : ""}
+        <div class="page-footer"> Love you! <3  din ${totalContentPages}</div>
+    </div>
+    </div>
+    `);
+}
+
+// Ultima pagina (Fara numar)
+pages.push(`<div class="page"><div class="content lastPageContent"><h2>BEGINNING!</h2></div></div>`);
+book.append(pages.join(""));
+
+function startBook(){
+    const audio = document.getElementById("bgMusic");
+    audio.volume = 0.5;
+    audio.play().catch(e => console.log("Audio block: ", e));
+
+    document.getElementById("intro").style.display = "none";
+    document.querySelector(".bg").style.display = "block";
+    document.querySelector(".blur").style.display = "block";
+    document.getElementById("container").style.display = "flex";
+
+    setTimeout(()=>{
+        book.turn({
+            width:900,
+            height:550,
+            autoCenter:true,
+            display:'double',
+            gradients:true,
+            elevation:100
+        });
+        typeEffect();
+    },400);
+}
+
+function zoom(img){
+    document.getElementById("zoomImg").src = img.src;
+    document.getElementById("zoomOverlay").style.display = "flex";
+}
+function closeZoom(){
+    document.getElementById("zoomOverlay").style.display = "none";
+}
+
+/* CANVAS: STELE */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let stars = [];
+let shooters = [];
+for(let i=0;i<150;i++){
+    stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.2, a: Math.random()*0.8});
+}
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{
+        ctx.globalAlpha = s.a;
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle = "white"; ctx.fill();
+    });
+    if(Math.random() < 0.02) shooters.push({x: Math.random()*canvas.width, y: 0, len: Math.random()*80+20, s: Math.random()*10+5});
+    shooters.forEach((s, i) => {
+        ctx.globalAlpha = 0.7; ctx.beginPath(); ctx.strokeStyle = "white"; ctx.lineWidth = 2;
+        ctx.moveTo(s.x, s.y); ctx.lineTo(s.x+s.len, s.y+s.len); ctx.stroke();
+        s.x += s.s; s.y += s.s;
+        if(s.y > canvas.height) shooters.splice(i, 1);
+    });
+    requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
